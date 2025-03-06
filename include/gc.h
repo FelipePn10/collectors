@@ -6,6 +6,7 @@ typedef signed char int8;
 struct Object {
     void *data;          // Dados do obj
     struct Object* next; // Ponteiro para o proximo objeto
+    int marked;          // 1 = importante, 0 = deletado
 };
 
 
@@ -46,6 +47,7 @@ void *gc_alloc(gc *gc, size_t size) {
     return obj;
 };
 
-void *gc_mark() {
-
-};
+// void *gc_mark() {
+//     //gc->head -> [object_one] -> [object_two] -> [object_three] -> NULL;
+//     obj->marked = 1;
+// };
