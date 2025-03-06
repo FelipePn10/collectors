@@ -3,10 +3,10 @@
 
 typedef signed char int8;
 
-typedef struct Object {
+struct Object {
     void *data;          // Dados do obj
     struct Object* next; // Ponteiro para o proximo objeto
-} Object;
+};
 
 
 typedef struct s_gc {
