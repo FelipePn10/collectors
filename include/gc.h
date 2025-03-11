@@ -4,14 +4,16 @@
 typedef signed char int8;
 
 struct Object {
-    void *data;          // Dados do obj
+    void* data;          // Dados do obj
     struct Object* next; // Ponteiro para o proximo objeto
-    int marked;          // 1 = importante, 0 = deletado
+    struct Object* ref;  // Referência para outro objeto (pode ser null)
+    int marked;          // 1 = marcado, 0 = não marcado
 };
 
 
 typedef struct s_gc {
-    Object *head;             // Ponteiro para o primeiro objeto gerenciado
+    Object *head;              // Ponteiro para o primeiro objeto gerenciado
+    Object objects;           // Lista encadeada de objetos alocados
     size_t total_memory;     //  Total de memória alocada
     size_t object_count;    //   Contador de objetos registrados
 } gc;
@@ -47,7 +49,17 @@ void *gc_alloc(gc *gc, size_t size) {
     return obj;
 };
 
-// void *gc_mark() {
-//     //gc->head -> [object_one] -> [object_two] -> [object_three] -> NULL;
-//     obj->marked = 1;
+// Responsável por identificar quais objetos na memória ainda estão em uso pelo programa
+// Percorre na memória todos os objetos do Gc, verifica se há referências válidas e marca os objetos em uso
+void gc_mark(Object* obj) {
+    //gc->head -> [object_one] -> [object_two] -> [object_three] -> NULL;
+   if (obj == NULL || obj->marked) return;
+   obj->marked = 1;
+
+   gc_mark(obj->ref);
+};
+
+// Responsável por liberar a memória dos objetos não marcados e reogarnizar a lista de alocação
+// void gc_sweep(gc) {
+   
 // };
